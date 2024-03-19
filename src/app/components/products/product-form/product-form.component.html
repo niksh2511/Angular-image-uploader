@@ -1,0 +1,72 @@
+<form (ngSubmit)="handleSubmit()" [formGroup]="productForm" id="product-form"
+    class="grid grid-cols-2 gap-3 mx-auto w-1/2 primary-color my-2 p-6 rounded-lg">
+
+    <label id="name">
+        Enter Name:
+        <input type="text" placeholder="Enter Name" formControlName="name" name="name"
+            class="w-full py-1 px-3 rounded-lg" />
+
+        <div class="error-msg" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+            <p *ngIf="hasError('name', 'required')">Enter Name</p>
+        </div>
+    </label>
+
+    <label id="price">
+        Enter Price:
+        <input type="number" placeholder="Enter Price" formControlName="price" name="price"
+            class="w-full py-1 px-3 rounded-lg" />
+        <div class="error-msg" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+            <p *ngIf="hasError('price', 'required')">Enter Price</p>
+            <p *ngIf="hasError('price', 'min')">Price must be at least 0</p>
+        </div>
+    </label>
+
+    <label id="discount">
+        Enter Discount:
+        <input type="number" placeholder="Enter Discount" formControlName="discount" name="discount"
+            class="w-full py-1 px-3 rounded-lg" />
+        <div class="error-msg" *ngIf="productForm.get('discount')?.invalid && productForm.get('discount')?.touched">
+            <p *ngIf="hasError('discount', 'required')">Enter Discount</p>
+            <p *ngIf="hasError('discount', 'min')">Discount must be at least 0</p>
+            <p *ngIf="hasError('discount', 'max')">Discount can be at most 100</p>
+        </div>
+    </label>
+
+    <label id="size">
+        Enter size:
+        <input type="number" placeholder="Enter size" formControlName="size" name="size"
+            class="w-full py-1 px-3 rounded-lg" />
+        <div class="error-msg" *ngIf="productForm.get('size')?.invalid && productForm.get('size')?.touched">
+            <p *ngIf="hasError('size', 'required')">Enter size</p>
+            <p *ngIf="hasError('size', 'min')">Size must be at least 0</p>
+            <p *ngIf="hasError('size', 'max')">Size can be at most 4</p>
+        </div>
+    </label>
+
+    <div formArrayName="imgArr" class="col-span-2">
+
+        <button type="button" class="btn-primary" (click)="addImage()">Add Image</button><br>
+
+        <label *ngFor="let image of getFormArr().controls, let i = index">
+            Enter Image URL:
+            <div class="flex">
+                <input type="text" placeholder="Enter Image URL" name="0" [formControlName]="i"
+                    class="py-1 px-3 rounded-lg grow mr-2" />
+
+                <button type="button" class="danger-btn" (click)="removeImage(i)">Remove Image</button>
+
+            </div>
+            <div class="error-msg"
+                *ngIf="productForm.get('imgArr')?.get(i.toString())?.invalid && productForm.get('imgArr')?.get(i.toString())?.touched">
+                <p>Enter Image URL</p>
+            </div>
+
+        </label>
+
+    </div>
+
+    <div class="text-center col-span-2">
+        <button type="submit" class="btn-primary" [disabled]="productForm.invalid">{{!isEdit ?  'Add' : 'Edit'}} Product</button>
+    </div>
+
+</form>
